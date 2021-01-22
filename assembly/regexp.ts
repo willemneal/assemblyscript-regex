@@ -2,7 +2,7 @@ import { State, Automata, toNFAFromAST, GroupEndMarkerState } from "./nfa/nfa";
 import { walker as nfaWalker } from "./nfa/walker";
 import { ConcatenationNode, AssertionNode } from "./parser/node";
 import { Parser } from "./parser/parser";
-import { first, last, toArray } from "./util";
+import { first, last } from "./util";
 import { walker as astWalker, expandRepetitions } from "./parser/walker";
 
 function recursiveBacktrackingSearch(
@@ -103,7 +103,7 @@ export class RegExp {
     if (str == "") {
       const matchStr = recursiveBacktrackingSearch(this.nfa.start, "");
       return matchStr != null
-        ? new Match(toArray(matchStr as string), 0, str)
+        ? new Match([matchStr as string], 0, str)
         : null;
     }
 
@@ -121,7 +121,7 @@ export class RegExp {
       // we have found a match
       if (matchStr != null) {
         const match = new Match(
-          toArray(matchStr as string).concat(
+          [matchStr as string].concat(
             this.groupMarkers.map<string>(m => m.capture)
           ),
           matchIndex,
